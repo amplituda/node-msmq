@@ -13,7 +13,7 @@ export default class Queue extends EventEmitter {
 	}
 
 	static createQueue(path) {
-		let result = queueProxy.create(path, true)
+		let result = queueProxy.create(path, true);
 
 		if (!result) {
 			throw new Error('Queue already exists');
@@ -24,6 +24,10 @@ export default class Queue extends EventEmitter {
 
 	static openOrCreateQueue(path) {
 		queueProxy.create(path, true);
+		return new Queue(path);
+	}
+
+	static open(path) {
 		return new Queue(path);
 	}
 
@@ -39,7 +43,7 @@ export default class Queue extends EventEmitter {
 			receive: (message) => {
 				this.emit('receive', message);
 			}
-		});
+		})
 	}
 
 	send(message, cb, transaction) {
