@@ -42,12 +42,13 @@ export default class Queue extends EventEmitter {
 		});
 	}
 
-	send(message, cb) {
+	send(message, cb, transaction) {
 		let formattedMessage = message.toString();
 
 		return queueProxy.send({
 			path: this.path,
-			message: formattedMessage
+			message: formattedMessage,
+			transaction: transaction
 		}, cb);
 	}
 

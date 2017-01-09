@@ -55,13 +55,22 @@ namespace MSMQLib
         {
             string path = (string)input.path;
             string message = (string)input.message;
+            bool transaction = (bool)input.transaction;
 
             byte[] bytes = Encoding.UTF8.GetBytes(message);
             MessageQueue queue = new MessageQueue(path);
             Message msg = new Message();
             msg.BodyStream = new MemoryStream(bytes);
 
-            await Task.Run(() => queue.Send(msg));
+            if(transaction)
+            {
+                await Task.Run(() => queue.Send(msg, MessageQueueTransactionType.Automatic));
+            }
+            else
+            {
+                await Task.Run(() => queue.Send(msg));
+            }
+
             return true;
         }
 
